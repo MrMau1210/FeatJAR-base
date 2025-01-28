@@ -1,30 +1,28 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
 package de.featjar.base.log;
 
-import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Problem;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -91,29 +89,6 @@ public interface Log {
             }
             return errorStringBuilder.toString();
         }
-    }
-
-    static ProgressThread startProgressThread(Progress progress) {
-        return startProgressThread(
-                progress,
-                1000,
-                new ActivityMessage(),
-                new ProgressMessage(progress),
-                new PassedTimeMessage(),
-                new UsedMemoryMessage());
-    }
-
-    @SafeVarargs
-    static ProgressThread startProgressThread(Progress progress, Supplier<String>... messageSuppliers) {
-        return startProgressThread(progress, 1000, messageSuppliers);
-    }
-
-    @SafeVarargs
-    static ProgressThread startProgressThread(
-            Progress progress, int refreshRate, Supplier<String>... messageSuppliers) {
-        ProgressThread thread = new ProgressThread(progress, Arrays.asList(messageSuppliers), refreshRate);
-        thread.start();
-        return thread;
     }
 
     /**

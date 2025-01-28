@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Random;
@@ -177,13 +176,12 @@ public class RangeMap<T> implements Cloneable {
     /**
      * Maps an index to an object.
      *
-     * @param index  the index, if this parameter equals -1, the next free index is determined.
+     * @param index  the index
      * @param object the object
      * @throws IllegalArgumentException if the index or object are invalid or
      *                                  already mapped
-     * @return the index used for the object
      */
-    public int add(int index, T object) {
+    public void add(int index, T object) {
         if (index < -1 || index == 0) {
             throw new IllegalArgumentException("index is invalid");
         } else if (index == -1) {
@@ -199,18 +197,15 @@ public class RangeMap<T> implements Cloneable {
         }
         objectToIndex.put(object, index);
         indexToObject.set(index, object);
-        return index;
     }
 
     /**
      * Maps the next free index to an object.
      *
      * @param object the object
-     *
-     * @return the new index of the object
      */
-    public int add(T object) {
-        return add(-1, object);
+    public void add(T object) {
+        add(-1, object);
     }
 
     /**
@@ -303,15 +298,11 @@ public class RangeMap<T> implements Cloneable {
         return Result.ofNullable(objectToIndex.get(object));
     }
 
-    protected Stream<Entry<T, Integer>> entryStream() {
-        return objectToIndex.entrySet().stream();
-    }
-
     /**
      * {@return all objects mapped by this range map}
      */
     public Stream<Pair<Integer, T>> stream() {
-        return entryStream().map(Pair::of).map(Pair::flip);
+        return objectToIndex.entrySet().stream().map(Pair::of).map(Pair::flip);
     }
 
     /**
@@ -328,7 +319,7 @@ public class RangeMap<T> implements Cloneable {
      *
      * @param objects a list of objects
      */
-    public Stream<Integer> stream(Collection<T> objects) {
+    public Stream<Integer> stream(List<T> objects) {
         return objects.stream().map(objectToIndex::get);
     }
 

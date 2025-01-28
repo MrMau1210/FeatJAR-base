@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -112,14 +112,9 @@ public abstract class AComputation<T> extends ATree<IComputation<?>> implements 
                 .map(computation -> computation.computeResult(tryHitCache, tryWriteCache, progressSupplier))
                 .collect(Collectors.toList());
         Progress progress = progressSupplier.get();
-        progress.setName(this.toString());
         checkCancel();
         try {
-            Result<T> result = mergeResults(results).flatMap(r -> {
-                Result<T> value = compute(r, progress);
-                progress.finish();
-                return value;
-            });
+            Result<T> result = mergeResults(results).flatMap(r -> compute(r, progress));
             if (tryWriteCache) {
                 getCache().tryWrite(this, new FutureResult<>(result, progress));
             }

@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -426,10 +426,8 @@ public class OptionList {
         T optionValue = (T) properties.getOrDefault(option.getName(), option.defaultValue);
         return optionValue != null
                 ? Result.of(optionValue)
-                : option.isRequired()
-                        ? Result.empty(new IllegalArgumentException(
-                                String.format("Argument <%s> is required, but was not set", option.name)))
-                        : Result.empty();
+                : Result.empty(new IllegalArgumentException(
+                        String.format("Argument <%s> is required, but was not set", option.name)));
     }
 
     @SuppressWarnings("unchecked")

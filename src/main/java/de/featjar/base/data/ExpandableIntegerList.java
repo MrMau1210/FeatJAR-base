@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -188,9 +188,6 @@ public class ExpandableIntegerList implements Serializable {
         return sb.toString();
     }
 
-    /**
-     *{@return The number of elements in this list}
-     */
     public int size() {
         return size;
     }
@@ -199,42 +196,10 @@ public class ExpandableIntegerList implements Serializable {
         return size == 0;
     }
 
-    /**
-     * The internal array used to store the elements of this list.
-     * Modifications will affect this instance.
-     * Maybe larger than {@link #size()}.
-     *
-     * @return The internal array used to store the elements
-     *
-     * @see #toArray()
-     * @see #toIntStream()
-     */
-    public int[] getInternalArray() {
+    public int[] toArray() {
         return elements;
     }
 
-    /**
-     * Creates an array containing all elements of this list.
-     * Modifications will not affect this instance.
-     * The array will be as large as {@link size()}.
-     * <br><br>
-     * If modification is not necessary, but performance is important, consider using {@link #getInternalArray()}.
-     *
-     * @return An array containing all elements
-     *
-     * @see #getInternalArray()
-     * @see #toIntStream()
-     */
-    public int[] toArray() {
-        return Arrays.copyOf(elements, size);
-    }
-
-    /**
-     * {@return A stream over all elements in this list}
-     *
-     * @see #getInternalArray()
-     * @see #toArray()
-     */
     public IntStream toIntStream() {
         return IntStream.range(0, size).map(i -> elements[i]);
     }

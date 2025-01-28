@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -36,13 +36,14 @@ public final class MultiLexicographicIterator<E> implements Spliterator<ICombina
 
     private final ICombination<E, int[]> combination;
 
-    public static Stream<ICombination<Void, int[]>> stream(int[][] items, int[] t) {
-        return StreamSupport.stream(new MultiLexicographicIterator<>(items, t, null), false);
+    public static void main(String[] args) {
+        int[] i1 = new int[] {1, 2, 3, 4, 5};
+        int[] i2 = new int[] {1, 2, 3, 4, 5};
+        stream(new int[][] {i1, i1, i2, i2}, new int[] {2, 2}).forEach(System.out::println);
     }
 
-    public static <V> Stream<ICombination<V, int[]>> parallelStream(
-            int[][] items, int[] t, Supplier<V> environmentCreator) {
-        return StreamSupport.stream(new MultiLexicographicIterator<>(items, t, environmentCreator), true);
+    public static Stream<ICombination<Void, int[]>> stream(int[][] items, int[] t) {
+        return StreamSupport.stream(new MultiLexicographicIterator<>(items, t, null), false);
     }
 
     public MultiLexicographicIterator(int[][] items, int[] t, Supplier<E> environmentCreator) {

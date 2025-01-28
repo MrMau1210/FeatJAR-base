@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-base.
+ * This file is part of FeatJAR-FeatJAR-base.
  *
- * base is free software: you can redistribute it and/or modify it
+ * FeatJAR-base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * base is distributed in the hope that it will be useful,
+ * FeatJAR-base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with base. If not, see <https://www.gnu.org/licenses/>.
+ * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -87,10 +87,6 @@ public interface IComputation<T> extends Supplier<Result<T>>, ITree<IComputation
 
     default T compute() {
         return computeResult().orElseThrow();
-    }
-
-    default T compute(Supplier<Progress> progressSupplier) {
-        return computeResult(progressSupplier).orElseThrow();
     }
 
     /**
@@ -195,17 +191,6 @@ public interface IComputation<T> extends Supplier<Result<T>>, ITree<IComputation
      */
     default Result<T> computeResult(Duration timeout) {
         return computeResult(true, true, timeout);
-    }
-
-    /**
-     * {@return the (cached) result of this computation. Uses the given progress supplier to create {@link Progress} instances for each computation.
-     *
-     * @param progressSupplier the progress supplier
-     *
-     * @see #computeResult(boolean, boolean, Supplier)
-     */
-    default Result<T> computeResult(Supplier<Progress> progressSupplier) {
-        return computeResult(true, true, progressSupplier);
     }
 
     /**
