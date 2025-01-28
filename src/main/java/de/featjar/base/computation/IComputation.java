@@ -27,6 +27,7 @@ import de.featjar.base.tree.structure.ITree;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -86,6 +87,10 @@ public interface IComputation<T> extends Supplier<Result<T>>, ITree<IComputation
 
     default T compute() {
         return computeResult().orElseThrow();
+    }
+
+    default T compute(Supplier<Progress> progressSupplier) {
+        return computeResult(progressSupplier).orElseThrow();
     }
 
     /**
@@ -168,7 +173,12 @@ public interface IComputation<T> extends Supplier<Result<T>>, ITree<IComputation
         try {
             return computeFutureResult(tryHitCache, tryWriteCache)
                     .getPromise()
-                    .onTimeout(() -> getIntermediateResult(), timeout, true)
+                    .onTimeout(
+                            () -> Result.empty(new TimeoutException(
+                                            String.format("Timeout of %ss was reached.", timeout.getSeconds())))
+                                    .merge(getIntermediateResult()),
+                            timeout,
+                            true)
                     .get();
         } catch (Exception e) {
             return Result.empty(e);
@@ -185,6 +195,17 @@ public interface IComputation<T> extends Supplier<Result<T>>, ITree<IComputation
      */
     default Result<T> computeResult(Duration timeout) {
         return computeResult(true, true, timeout);
+    }
+
+    /**
+     * {@return the (cached) result of this computation. Uses the given progress supplier to create {@link Progress} instances for each computation.
+     *
+     * @param progressSupplier the progress supplier
+     *
+     * @see #computeResult(boolean, boolean, Supplier)
+     */
+    default Result<T> computeResult(Supplier<Progress> progressSupplier) {
+        return computeResult(true, true, progressSupplier);
     }
 
     /**

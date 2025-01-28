@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Random;
@@ -176,12 +177,13 @@ public class RangeMap<T> implements Cloneable {
     /**
      * Maps an index to an object.
      *
-     * @param index  the index
+     * @param index  the index, if this parameter equals -1, the next free index is determined.
      * @param object the object
      * @throws IllegalArgumentException if the index or object are invalid or
      *                                  already mapped
+     * @return the index used for the object
      */
-    public void add(int index, T object) {
+    public int add(int index, T object) {
         if (index < -1 || index == 0) {
             throw new IllegalArgumentException("index is invalid");
         } else if (index == -1) {
@@ -197,15 +199,18 @@ public class RangeMap<T> implements Cloneable {
         }
         objectToIndex.put(object, index);
         indexToObject.set(index, object);
+        return index;
     }
 
     /**
      * Maps the next free index to an object.
      *
      * @param object the object
+     *
+     * @return the new index of the object
      */
-    public void add(T object) {
-        add(-1, object);
+    public int add(T object) {
+        return add(-1, object);
     }
 
     /**
@@ -298,11 +303,15 @@ public class RangeMap<T> implements Cloneable {
         return Result.ofNullable(objectToIndex.get(object));
     }
 
+    protected Stream<Entry<T, Integer>> entryStream() {
+        return objectToIndex.entrySet().stream();
+    }
+
     /**
      * {@return all objects mapped by this range map}
      */
     public Stream<Pair<Integer, T>> stream() {
-        return objectToIndex.entrySet().stream().map(Pair::of).map(Pair::flip);
+        return entryStream().map(Pair::of).map(Pair::flip);
     }
 
     /**
@@ -319,7 +328,7 @@ public class RangeMap<T> implements Cloneable {
      *
      * @param objects a list of objects
      */
-    public Stream<Integer> stream(List<T> objects) {
+    public Stream<Integer> stream(Collection<T> objects) {
         return objects.stream().map(objectToIndex::get);
     }
 

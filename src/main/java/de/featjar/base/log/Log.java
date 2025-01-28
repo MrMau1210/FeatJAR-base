@@ -20,9 +20,11 @@
  */
 package de.featjar.base.log;
 
+import de.featjar.base.computation.Progress;
 import de.featjar.base.data.Problem;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -69,25 +71,49 @@ public interface Log {
     }
 
     static String getErrorMessage(Throwable error, boolean printStacktrace) {
-        StringBuilder sb = new StringBuilder();
         if (printStacktrace) {
             StringWriter errorWriter = new StringWriter();
             error.printStackTrace(new PrintWriter(errorWriter));
             return errorWriter.toString();
         } else {
+            StringBuilder errorStringBuilder = new StringBuilder();
             Throwable e = error;
             while (e != null) {
                 StackTraceElement stackTrace = e.getStackTrace()[0];
-                sb.append(String.format(
-                        "%s:%d %s%n", stackTrace.getClassName(), stackTrace.getLineNumber(), e.toString()));
+                errorStringBuilder.append(String.format(
+                        "%s (%s @ %s:%d)%n\t",
+                        e.getMessage(), e.getClass().getName(), stackTrace.getClassName(), stackTrace.getLineNumber()));
                 e = e.getCause();
             }
-            int length = sb.length();
+            int length = errorStringBuilder.length();
             if (length > 0) {
-                sb.setLength(length - 1);
+                errorStringBuilder.setLength(length - 2);
             }
-            return sb.toString();
+            return errorStringBuilder.toString();
         }
+    }
+
+    static ProgressThread startProgressThread(Progress progress) {
+        return startProgressThread(
+                progress,
+                1000,
+                new ActivityMessage(),
+                new ProgressMessage(progress),
+                new PassedTimeMessage(),
+                new UsedMemoryMessage());
+    }
+
+    @SafeVarargs
+    static ProgressThread startProgressThread(Progress progress, Supplier<String>... messageSuppliers) {
+        return startProgressThread(progress, 1000, messageSuppliers);
+    }
+
+    @SafeVarargs
+    static ProgressThread startProgressThread(
+            Progress progress, int refreshRate, Supplier<String>... messageSuppliers) {
+        ProgressThread thread = new ProgressThread(progress, Arrays.asList(messageSuppliers), refreshRate);
+        thread.start();
+        return thread;
     }
 
     /**

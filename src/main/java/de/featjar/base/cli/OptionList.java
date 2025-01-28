@@ -115,7 +115,7 @@ public class OptionList {
                     "log-error", Option.valueOf(Log.Verbosity.class))
             .setDescription(String.format(
                     "Message types printed to the error stream (%s)", Option.possibleValues(Log.Verbosity.class)))
-            .setDefaultValue(List.of(Log.Verbosity.ERROR));
+            .setDefaultValue(List.of(Log.Verbosity.WARNING, Log.Verbosity.ERROR));
 
     static final Option<List<Log.Verbosity>> LOG_INFO_FILE_OPTION = Option.newListOption(
                     "log-info-file", Option.valueOf(Log.Verbosity.class))
@@ -426,8 +426,10 @@ public class OptionList {
         T optionValue = (T) properties.getOrDefault(option.getName(), option.defaultValue);
         return optionValue != null
                 ? Result.of(optionValue)
-                : Result.empty(new IllegalArgumentException(
-                        String.format("Argument <%s> is required, but was not set", option.name)));
+                : option.isRequired()
+                        ? Result.empty(new IllegalArgumentException(
+                                String.format("Argument <%s> is required, but was not set", option.name)))
+                        : Result.empty();
     }
 
     @SuppressWarnings("unchecked")

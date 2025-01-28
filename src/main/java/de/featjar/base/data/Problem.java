@@ -88,8 +88,8 @@ public class Problem {
             return "";
         }
     }
-
-    /**
+    
+        /**
      * Intended to be used with methods of {@link Result}, like {@link Result#orElseThrow()}
      * @param problems the problem list
      * @return If there exists a {@link RuntimeException} in problems, then the first one is returned. If there is none, a new {@link RuntimeException} is returned.
