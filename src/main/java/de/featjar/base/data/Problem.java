@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-FeatJAR-base.
+ * This file is part of FeatJAR-base.
  *
- * FeatJAR-base is free software: you can redistribute it and/or modify it
+ * base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * FeatJAR-base is distributed in the hope that it will be useful,
+ * base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
+ * along with base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -87,6 +87,18 @@ public class Problem {
         } else {
             return "";
         }
+    }
+
+    /**
+     * Intended to be used with methods of {@link Result}, like {@link Result#orElseThrow()}
+     * @param problems the problem list
+     * @return If there exists a {@link RuntimeException} in problems, then the first one is returned. If there is none, a new {@link RuntimeException} is returned.
+     */
+    public static RuntimeException getFirstException(List<Problem> problems) {
+        Optional<Problem> exception = problems.stream()
+                .filter(problem -> problem.getSeverity() == Problem.Severity.ERROR)
+                .findFirst();
+        return exception.isPresent() ? new RuntimeException(exception.get().getException()) : new RuntimeException();
     }
 
     protected final Exception exception;

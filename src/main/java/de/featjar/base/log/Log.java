@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-FeatJAR-base.
+ * This file is part of FeatJAR-base.
  *
- * FeatJAR-base is free software: you can redistribute it and/or modify it
+ * base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * FeatJAR-base is distributed in the hope that it will be useful,
+ * base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
+ * along with base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -69,25 +69,24 @@ public interface Log {
     }
 
     static String getErrorMessage(Throwable error, boolean printStacktrace) {
+        StringBuilder sb = new StringBuilder();
         if (printStacktrace) {
             StringWriter errorWriter = new StringWriter();
             error.printStackTrace(new PrintWriter(errorWriter));
             return errorWriter.toString();
         } else {
-            StringBuilder errorStringBuilder = new StringBuilder();
             Throwable e = error;
             while (e != null) {
                 StackTraceElement stackTrace = e.getStackTrace()[0];
-                errorStringBuilder.append(String.format(
-                        "%s (%s @ %s:%d)%n\t",
-                        e.getMessage(), e.getClass().getName(), stackTrace.getClassName(), stackTrace.getLineNumber()));
+                sb.append(String.format(
+                        "%s:%d %s%n", stackTrace.getClassName(), stackTrace.getLineNumber(), e.toString()));
                 e = e.getCause();
             }
-            int length = errorStringBuilder.length();
+            int length = sb.length();
             if (length > 0) {
-                errorStringBuilder.setLength(length - 2);
+                sb.setLength(length - 1);
             }
-            return errorStringBuilder.toString();
+            return sb.toString();
         }
     }
 

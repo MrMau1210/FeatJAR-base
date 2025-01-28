@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2025 FeatJAR-Development-Team
  *
- * This file is part of FeatJAR-FeatJAR-base.
+ * This file is part of FeatJAR-base.
  *
- * FeatJAR-base is free software: you can redistribute it and/or modify it
+ * base is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3.0 of the License,
  * or (at your option) any later version.
  *
- * FeatJAR-base is distributed in the hope that it will be useful,
+ * base is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with FeatJAR-base. If not, see <https://www.gnu.org/licenses/>.
+ * along with base. If not, see <https://www.gnu.org/licenses/>.
  *
  * See <https://github.com/FeatureIDE/FeatJAR-base> for further information.
  */
@@ -62,10 +62,6 @@ import java.util.function.Supplier;
 public final class FeatJAR extends IO implements AutoCloseable {
     public static final String ROOT_PACKAGE_NAME = "de.featjar";
     public static final String LIBRARY_NAME = "feat.jar";
-
-    public static final int ERROR_COMPUTING_RESULT = 1;
-    public static final int ERROR_TIMEOUT = 1;
-    public static final int ERROR_WRITING_RESULT = 1;
 
     /**
      * Configures FeatJAR.
@@ -284,7 +280,7 @@ public final class FeatJAR extends IO implements AutoCloseable {
 
         List<Problem> problems = optionInput.parseArguments();
         if (Problem.containsError(problems)) {
-            FeatJAR.log().problems(problems, Verbosity.ERROR);
+            FeatJAR.log().problems(problems);
             FeatJAR.log().problems(optionInput.parseRemainingArguments());
             FeatJAR.log().message(OptionList.getHelp(optionInput.getCommand().orElse(null)));
             return panic();
@@ -316,7 +312,7 @@ public final class FeatJAR extends IO implements AutoCloseable {
                 if (configure) {
                     FeatJAR.getInstance().setConfiguration(optionInput.getConfiguration());
                 }
-                return command.run(optionInput);
+                command.run(optionInput);
             }
         }
         return 0;
@@ -356,7 +352,7 @@ public final class FeatJAR extends IO implements AutoCloseable {
                 newLog.print(message, verbosity);
             });
         }
-        return FeatJAR.ERROR_COMPUTING_RESULT;
+        return 1;
     }
 
     /**
